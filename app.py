@@ -35,7 +35,8 @@ if st.session_state.df is None:
         - Dùng các thư viện: Streamlit, Pandas, Scikit-learn
         - Không cần viết code – chỉ cần tải dữ liệu và chọn module
 
-        **Nguồn sở hữu:** [databinocs](https://github.com/databinocs)
+        **Tác giả** [Nhat Thien An](https://databinocs.com/about/)
+        **Nguồn sở hữu:** [databinocs](https://github.com/databinocs/)
         """)
 
     # Hiển thị upload file
