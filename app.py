@@ -21,8 +21,8 @@ if uploaded_file:
     menu = st.sidebar.selectbox(
         "📂 Chọn chức năng",
         [
-            "📘 Hướng dẫn sử dụng",
-            "ℹ️ Giới thiệu dự án",
+            "Hướng dẫn sử dụng",
+            "Giới thiệu dự án",
             "Cleaning",
             "EDA",
             "Visualization",
