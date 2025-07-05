@@ -1,0 +1,5 @@
+# Bỏ qua môi trường ảo & file tạm
+venv/
+__pycache__/
+*.pyc
+.DS_Store
