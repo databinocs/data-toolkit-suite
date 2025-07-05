@@ -13,7 +13,9 @@ from modules.export import download_data
 
 # Page config
 st.set_page_config(page_title="Data Toolkit Suite", layout="wide")
-st.title("🧰 Data Toolkit Suite – Công cụ xử lý & khám phá dữ liệu")
+st.title("🧰 Data Toolkit Suite")
+st.markdown("<small>Công cụ hỗ trợ xử lý và khám phá dữ liệu.</small>", unsafe_allow_html=True)
+
 
 # Init state
 if "df" not in st.session_state:
@@ -31,9 +33,10 @@ if st.session_state.df is None:
 
     with st.expander("Giới thiệu dự án"):
         st.markdown("""
-        - **🧰 Data Toolkit Suite** là công cụ web hỗ trợ làm sạch và khám phá dữ liệu cho người học ngành data
+        **🧰 Data Toolkit Suite** là công cụ web hỗ trợ làm sạch và khám phá dữ liệu cho người học ngành data
         - Dùng các thư viện: Streamlit, Pandas, Scikit-learn
-        - Không cần viết code – chỉ cần tải dữ liệu và chọn module
+        - Không cần viết code – Chạy trực tiếp trên trình duyệt
+        - Chỉ cần tải dữ liệu và chọn module
 
         **Tác giả** [Nhat Thien An](https://databinocs.com/about/)
         **Nguồn sở hữu:** [databinocs](https://github.com/databinocs/)
@@ -52,10 +55,13 @@ if st.session_state.df is None:
 else:
     df = st.session_state.df
 
-    # Sidebar chọn chức năng xử lý
-    menu = st.sidebar.selectbox(
-        "🔧 Chọn chức năng xử lý dữ liệu",
-        [
+    st.success("✅ Dữ liệu đã sẵn sàng")
+
+    # Menu chọn chức năng (nằm giữa trang, không dùng sidebar)
+    st.markdown("## 📂 Chọn chức năng")
+    menu = st.radio(
+        label="",
+        options=[
             "Cleaning",
             "EDA Processing",
             "Visualization",
@@ -64,45 +70,37 @@ else:
             "Clustering",
             "Time Series",
             "Modeling"
-        ]
+        ],
+        horizontal=True
     )
 
     # Giao diện theo chức năng
     if menu == "Cleaning":
-        st.header("🧹 Làm sạch dữ liệu")
         clean_data(df)
 
     elif menu == "EDA Processing":
-        st.header("📊 Phân tích tổng quan dữ liệu")
         show_eda(df)
 
     elif menu == "Visualization":
-        st.header("📈 Tạo biểu đồ tương tác")
         visualize_data(df)
 
     elif menu == "Outlier Detection":
-        st.header("🕵️ Phát hiện Outlier")
         detect_outliers(df)
 
     elif menu == "Anomaly Detection":
-        st.header("⚠️ Phát hiện bất thường")
         anomaly_detection(df)
 
     elif menu == "Clustering":
-        st.header("🧩 Gom cụm (Clustering)")
         clustering_app(df)
 
     elif menu == "Time Series":
-        st.header("⏱ Phân tích chuỗi thời gian")
         time_series_app(df)
 
     elif menu == "Modeling":
-        st.header("🤖 Huấn luyện mô hình dự đoán")
         run_model(df)
 
     # Hiển thị phần Export sau module xử lý
     st.markdown("---")
-    st.subheader("📥 Tải xuống dữ liệu sau xử lý")
     download_data(df)
 
 
