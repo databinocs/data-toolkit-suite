@@ -12,56 +12,26 @@ from modules.modeling import run_model
 from modules.export import download_data
 
 # Page config
-st.set_page_config(page_title="Data Toolkit Suite", layout="wide")
 st.title("🧰 Data Toolkit Suite")
-st.markdown("<small>Công cụ hỗ trợ xử lý và khám phá dữ liệu.</small>", unsafe_allow_html=True)
-
+st.markdown("<small>Data Processing and Exploration Tool.</small>", unsafe_allow_html=True)
 
 # Init state
 if "df" not in st.session_state:
     st.session_state.df = None
 
-# Nếu chưa có dữ liệu: hiển thị phần Hướng dẫn + Giới thiệu + Import
-if st.session_state.df is None:
-    st.markdown("## Hướng dẫn sử dụng")
-    st.markdown("""
-    **1. Tải file `.csv` từ máy bạn để bắt đầu phân tích**  
-    **2. Sau khi tải lên, sidebar sẽ hiển thị các module xử lý**
+# Sidebar layout
+with st.sidebar:
+    st.subheader("📤 Import CSV File")
+    uploaded_file = st.file_uploader("Upload CSV File", type=["csv"])
 
-    👉 Dữ liệu mẫu gợi ý: `iris.csv`, `titanic.csv`, `sales.csv`
-    """)
-
-    with st.expander("Giới thiệu dự án"):
-        st.markdown("""
-        **🧰 Data Toolkit Suite** là công cụ web hỗ trợ làm sạch và khám phá dữ liệu cho người học ngành data
-        - Dùng các thư viện: Streamlit, Pandas, Scikit-learn
-        - Không cần viết code – Chạy trực tiếp trên trình duyệt
-        - Chỉ cần tải dữ liệu và chọn module
-
-        **Tác giả** [Nhat Thien An](https://databinocs.com/about/)
-        **Nguồn sở hữu:** [databinocs](https://github.com/databinocs/)
-        """)
-
-    # Hiển thị upload file
-    st.markdown("### 📤 Tải dữ liệu CSV")
-    uploaded_file = st.file_uploader("Chọn file CSV", type=["csv"])
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
         st.session_state.df = df
-        st.success("✅ Dữ liệu đã tải thành công!")
-        st.dataframe(df, use_container_width=True)
+        st.success("✅ Successful!")
 
-# Nếu đã có dữ liệu: hiển thị sidebar + module xử lý
-else:
-    df = st.session_state.df
-
-    st.success("✅ Dữ liệu đã sẵn sàng")
-
-    # Menu chọn chức năng (nằm giữa trang, không dùng sidebar)
-    st.markdown("## 📂 Chọn chức năng")
-    menu = st.radio(
-        label="",
-        options=[
+    menu = st.selectbox(
+        "📂 Select function:",
+        [
             "Cleaning",
             "EDA Processing",
             "Visualization",
@@ -70,39 +40,57 @@ else:
             "Clustering",
             "Time Series",
             "Modeling"
-        ],
-        horizontal=True
+        ]
     )
 
-    # Giao diện theo chức năng
+    st.markdown("---")
+    st.subheader("💾 Export CSV File")
+
+    if st.session_state.get("df") is not None:
+        from modules.export import download_data
+        download_data(st.session_state.df)
+    else:
+        st.info("⏳ Data Must Be Uploaded Before Export")
+
+# Trang chính
+if st.session_state.df is None:
+    st.markdown("## User Guide")
+    st.markdown("""
+    **1. Upload a .csv file from your device to start analysis**  
+    **2. After uploading, the sidebar will display processing modules**
+
+    👉 Suggested sample data files: `iris.csv`, `titanic.csv`, `sales.csv`
+    """)
+
+    with st.expander("Introduction"):
+        st.markdown("""
+        **🧰 Data Toolkit Suite* is a web-based tool supporting data cleaning and exploration for data learners  
+        - Uses libraries: Streamlit, Pandas, Scikit-learn  
+        - No coding required – Runs directly in the browser  
+        - Simply upload data and select a module  
+
+        **Author**: [Nhat Thien An](https://databinocs.com/about/)  
+        **Source**: [databinocs](https://github.com/databinocs/)
+        """)
+else:
+    df = st.session_state.df
+
     if menu == "Cleaning":
         clean_data(df)
-
     elif menu == "EDA Processing":
         show_eda(df)
-
     elif menu == "Visualization":
         visualize_data(df)
-
     elif menu == "Outlier Detection":
         detect_outliers(df)
-
     elif menu == "Anomaly Detection":
         anomaly_detection(df)
-
     elif menu == "Clustering":
         clustering_app(df)
-
     elif menu == "Time Series":
         time_series_app(df)
-
     elif menu == "Modeling":
         run_model(df)
-
-    # Hiển thị phần Export sau module xử lý
-    st.markdown("---")
-    download_data(df)
-
 
 
 

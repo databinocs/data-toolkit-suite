@@ -9,14 +9,14 @@ def visualize_data(df):
     all_cols = df.columns.tolist()
 
     if len(numeric_cols) < 1:
-        st.warning("Không có đủ cột số để vẽ biểu đồ.")
+        st.warning("Insufficient Numeric Columns.")
         return
 
-    chart_type = st.selectbox("Chọn loại biểu đồ", ["Scatter", "Bar", "Line"])
-    x_col = st.selectbox("Chọn cột X", all_cols)
-    y_col = st.selectbox("Chọn cột Y", numeric_cols)
+    chart_type = st.selectbox("Select Chart Type", ["Scatter", "Bar", "Line"])
+    x_col = st.selectbox("Select X Column", all_cols)
+    y_col = st.selectbox("Select Y Column", numeric_cols)
 
-    if st.button("📊 Vẽ biểu đồ"):
+    if st.button("📊 Plot Chart"):
         if chart_type == "Scatter":
             fig = px.scatter(df, x=x_col, y=y_col, title=f"{chart_type} Plot")
         elif chart_type == "Bar":

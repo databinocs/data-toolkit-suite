@@ -8,14 +8,14 @@ def clustering_app(df):
 
     numeric_cols = df.select_dtypes(include=['int', 'float']).columns.tolist()
     if len(numeric_cols) < 2:
-        st.warning("Cần ít nhất 2 cột số để phân cụm.")
+        st.warning("At Least Two Numeric Columns Required.")
         return df
 
-    col_x = st.selectbox("Chọn trục X", numeric_cols, index=0)
-    col_y = st.selectbox("Chọn trục Y", numeric_cols, index=1)
-    k = st.slider("Số lượng cụm (k)", 2, 10, 3)
+    col_x = st.selectbox("Select X-Axis", numeric_cols, index=0)
+    col_y = st.selectbox("Select Y-Axis", numeric_cols, index=1)
+    k = st.slider("Number of Clusters (k)", 2, 10, 3)
 
-    if st.button("📍 Chạy phân cụm"):
+    if st.button("📍 Run Clustering"):
         model = KMeans(n_clusters=k, random_state=42, n_init=10)
         df['cluster'] = model.fit_predict(df[[col_x, col_y]])
 
@@ -24,7 +24,7 @@ def clustering_app(df):
                          labels={"color": "Cluster"})
         st.plotly_chart(fig, use_container_width=True)
 
-        if st.checkbox("❌ Xoá cột 'cluster' sau khi xem"):
+        if st.checkbox("❌ Delete 'cluster' Column After Viewing"):
             df.drop(columns="cluster", inplace=True)
 
     return df

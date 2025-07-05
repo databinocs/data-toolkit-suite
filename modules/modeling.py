@@ -10,16 +10,16 @@ def run_model(df):
     all_cols = df.columns.tolist()
     numeric_cols = df.select_dtypes(include=['int', 'float']).columns.tolist()
 
-    target_col = st.selectbox("🎯 Chọn cột target", all_cols)
-    feature_cols = st.multiselect("🔢 Chọn các cột đặc trưng (features)", numeric_cols)
+    target_col = st.selectbox("🎯 Select Target Column", all_cols)
+    feature_cols = st.multiselect("🔢 Select Feature Columns", numeric_cols)
 
     if not feature_cols or not target_col:
-        st.info("⚠️ Vui lòng chọn đầy đủ feature và target.")
+        st.info("⚠️ Please Select All Features and Target.")
         return
 
-    test_size = st.slider("📎 Tỉ lệ test", 0.1, 0.5, 0.2)
+    test_size = st.slider("📎 Test Split Ratio", 0.1, 0.5, 0.2)
 
-    if st.button("🚀 Huấn luyện mô hình"):
+    if st.button("🚀 Train Model"):
         try:
             X = df[feature_cols]
             y = df[target_col]
@@ -37,4 +37,4 @@ def run_model(df):
             st.dataframe(pd.DataFrame(report).transpose())
 
         except Exception as e:
-            st.error(f"❌ Lỗi khi train mô hình: {e}")
+            st.error(f"❌ Error During Model Training: {e}")

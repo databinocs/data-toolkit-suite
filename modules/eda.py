@@ -6,21 +6,21 @@ import pandas as pd
 def show_eda(df):
     st.subheader("📊 Exploratory Data Analysis (EDA)")
 
-    if st.checkbox("📋 Hiển thị thống kê mô tả"):
+    if st.checkbox("📋 Display Descriptive Statistics"):
         st.write(df.describe())
 
-    if st.checkbox("📈 Vẽ biểu đồ phân phối"):
+    if st.checkbox("📈 Plot Distribution Chart"):
         numeric_cols = df.select_dtypes(include=['int', 'float']).columns.tolist()
         if numeric_cols:
-            col = st.selectbox("Chọn cột số để hiển thị histogram", numeric_cols)
-            bins = st.slider("Số lượng bins", 5, 100, 20)
+            col = st.selectbox("Select Numeric Column", numeric_cols)
+            bins = st.slider("Number of Bins", 5, 100, 20)
             fig, ax = plt.subplots()
             sns.histplot(df[col], kde=True, bins=bins, ax=ax)
             st.pyplot(fig)
         else:
-            st.info("Không có cột số trong dữ liệu.")
+            st.info("No Numeric Columns.")
 
-    if st.checkbox("🔗 Hiển thị ma trận tương quan"):
+    if st.checkbox("🔗 Display Correlation Matrix"):
         numeric_cols = df.select_dtypes(include=['int', 'float']).columns.tolist()
         if len(numeric_cols) >= 2:
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -28,4 +28,4 @@ def show_eda(df):
             sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
             st.pyplot(fig)
         else:
-            st.info("Cần ít nhất 2 cột số để tính tương quan.")
+            st.info("At Least Two Numeric Columns Required.")

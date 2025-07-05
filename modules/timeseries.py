@@ -8,21 +8,21 @@ def time_series_app(df):
     all_cols = df.columns.tolist()
     numeric_cols = df.select_dtypes(include=['int', 'float']).columns.tolist()
 
-    time_col = st.selectbox("🕒 Chọn cột thời gian", all_cols)
-    value_col = st.selectbox("🔢 Chọn cột giá trị số", numeric_cols)
+    time_col = st.selectbox("🕒 Select Time Column", all_cols)
+    value_col = st.selectbox("🔢 Select Numeric Value Column", numeric_cols)
 
-    freq = st.radio("📅 Tần suất", ["Ngày", "Tháng"])
+    freq = st.radio("📅 Frequency", ["Day", "Month"])
 
-    if st.button("📈 Vẽ biểu đồ thời gian"):
+    if st.button("📈 Plot Time Series Chart"):
         try:
             df[time_col] = pd.to_datetime(df[time_col])
         except Exception:
-            st.error("❌ Không thể chuyển cột thành dạng thời gian.")
+            st.error("❌ Unable to Convert Column to Time Format.")
             return
 
         df_sorted = df.sort_values(by=time_col)
 
-        if freq == "Tháng":
+        if freq == "Month":
             df_grouped = df_sorted.groupby(df_sorted[time_col].dt.to_period("M"))[value_col].mean()
             df_grouped.index = df_grouped.index.to_timestamp()
         else:

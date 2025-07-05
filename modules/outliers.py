@@ -7,14 +7,14 @@ def detect_outliers(df):
 
     num_cols = df.select_dtypes(include=['int', 'float']).columns.tolist()
     if not num_cols:
-        st.info("Không có cột số để phân tích.")
+        st.info("No Numeric Columns Available.")
         return df
 
-    col = st.selectbox("Chọn cột để kiểm tra outlier", num_cols)
-    method = st.radio("Chọn phương pháp", ["Z-score", "IQR"])
+    col = st.selectbox("Select Column", num_cols)
+    method = st.radio("Select Method", ["Z-score", "IQR"])
 
     if method == "Z-score":
-        threshold = st.slider("Ngưỡng Z-score", 1.0, 5.0, 3.0)
+        threshold = st.slider("Z-score Threshold", 1.0, 5.0, 3.0)
         z_scores = np.abs((df[col] - df[col].mean()) / df[col].std())
         outliers = df[z_scores > threshold]
     else:
@@ -23,11 +23,11 @@ def detect_outliers(df):
         IQR = Q3 - Q1
         outliers = df[(df[col] < Q1 - 1.5 * IQR) | (df[col] > Q3 + 1.5 * IQR)]
 
-    st.write(f"Tìm thấy {len(outliers)} outliers trong cột {col}")
+    st.write(f"Found {len(outliers)} outliers in the Column {col}")
     st.dataframe(outliers)
 
-    if st.checkbox("❌ Xoá các outlier khỏi dữ liệu"):
+    if st.checkbox("❌ Remove Outliers"):
         df = df.drop(outliers.index)
-        st.success(f"Đã xoá {len(outliers)} dòng bất thường.")
+        st.success(f"{len(outliers)} Anomalous Rows Removed.")
 
     return df
